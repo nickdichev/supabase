@@ -1,6 +1,7 @@
 import Layout from '~/components/Layout'
 import Message from '~/components/Message'
 import MessageInput from '~/components/MessageInput'
+import ProofUpload from '~/components/ProofUpload'
 import { useRouter } from 'next/router'
 import { useStore, addMessage } from '~/lib/Store'
 import { useContext, useEffect, useRef } from 'react'
@@ -43,6 +44,7 @@ const ChannelsPage = (props) => {
         </div>
         <div className="p-2 absolute bottom-0 left-0 w-full">
           <MessageInput onSubmit={async (text) => addMessage(text, channelId, user.id)} />
+          <ProofUpload size={150} onUpload={(url) => console.log('hello?') }/>
         </div>
       </div>
     </Layout>
