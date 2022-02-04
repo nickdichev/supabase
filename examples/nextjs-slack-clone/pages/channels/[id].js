@@ -1,6 +1,7 @@
 import Layout from '~/components/Layout'
 import Message from '~/components/Message'
 import MessageInput from '~/components/MessageInput'
+import Proof from '~/components/Proof'
 import ProofUpload from '~/components/ProofUpload'
 import { useRouter } from 'next/router'
 import { useStore, addMessage, addProof } from '~/lib/Store'
@@ -14,7 +15,7 @@ const ChannelsPage = (props) => {
 
   // Else load up the page
   const { id: channelId } = router.query
-  const { messages, channels } = useStore({ channelId })
+  const { messages, channels, proofs } = useStore({ channelId })
 
   useEffect(() => {
     messagesEndRef.current.scrollIntoView({
@@ -38,6 +39,9 @@ const ChannelsPage = (props) => {
     <div className="p-2 overflow-y-auto">
     {messages.map((x) => (
       <Message key={x.id} message={x} />
+    ))}
+    {proofs.map((x) => (
+      <Proof key={x.id} proof={x} />
     ))}
             <div ref={messagesEndRef} style={{ height: 0 }} />
           </div>

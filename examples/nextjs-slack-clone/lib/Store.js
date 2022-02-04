@@ -12,12 +12,15 @@ export const supabase = createClient(
 export const useStore = (props) => {
   const [channels, setChannels] = useState([])
   const [messages, setMessages] = useState([])
+  const [proofs, setProofs] = useState([])
   const [users] = useState(new Map())
   const [newMessage, handleNewMessage] = useState(null)
   const [newChannel, handleNewChannel] = useState(null)
+  const [newProof, handleNewProof] = useState(null)
   const [newOrUpdatedUser, handleNewOrUpdatedUser] = useState(null)
   const [deletedChannel, handleDeletedChannel] = useState(null)
   const [deletedMessage, handleDeletedMessage] = useState(null)
+  const [updatedProof, handleUpdateProof] = useState(null)
 
   // Load initial data and set up listeners
   useEffect(() => {
@@ -40,11 +43,18 @@ export const useStore = (props) => {
       .on('INSERT', (payload) => handleNewChannel(payload.new))
       .on('DELETE', (payload) => handleDeletedChannel(payload.old))
       .subscribe()
+    // Listen for new and updated proofs
+    const proofListener = supabase
+      .from('proofs')
+      .on('INSERT', (payload) => handleNewProof(payload.new))
+      .on('UPDATE', (payload) => handleUpdatedProof(payload))
+      .subscribe()
     // Cleanup on unmount
     return () => {
       messageListener.unsubscribe()
       userListener.unsubscribe()
       channelListener.unsubscribe()
+      proofListener.unsubscribe()
     }
   }, [])
 
@@ -71,6 +81,18 @@ export const useStore = (props) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newMessage])
+
+  useEffect(() => {
+    if (newProof && newProof.channel_id === Number(props.channelId)) {
+      const handleAsync = async () => {
+        let authorId = newProof.user_id
+        if (!users.get(authorId)) await fetchUser(authorId, (user) => handleNewOrUpdatedUser(user))
+        setProofs(proofs.concat(newProof))
+      }
+    handleAsync()
+  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [newProof])
 
   // Deleted message received from postgres
   useEffect(() => {
@@ -100,6 +122,7 @@ export const useStore = (props) => {
     // We can export computed values here to map the authors to each message
     messages: messages.map((x) => ({ ...x, author: users.get(x.user_id) })),
     channels: channels !== null ? channels.sort((a, b) => a.slug.localeCompare(b.slug)) : [],
+    proofs: proofs.map((x) => ({ ...x, author: users.get(x.user_id) })),
     users,
   }
 }
