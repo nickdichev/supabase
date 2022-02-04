@@ -196,6 +196,18 @@ export const addMessage = async (message, channel_id, user_id) => {
   }
 }
 
+export const addProof = async (proof_url, channel_id, user_id) => {
+  try {
+    // proof_url, channel_id, creator_id, status
+    let { body } = await supabase.from('proofs').insert([
+      {proof_url: proof_url, channel_id: channel_id, user_id: user_id, status: null}
+    ])
+    return body
+  } catch (error) {
+    console.log('error', error)
+  }
+}
+
 /**
  * Delete a channel from the DB
  * @param {number} channel_id
