@@ -65,6 +65,9 @@ export const useStore = (props) => {
         messages.forEach((x) => users.set(x.user_id, x.author))
         setMessages(messages)
       })
+      fetchProofs(props.channelId, (proofs) => {
+        setProofs(proofs)
+      })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.channelId])
@@ -183,6 +186,20 @@ export const fetchMessages = async (channelId, setState) => {
       .select(`*, author:user_id(*)`)
       .eq('channel_id', channelId)
       .order('inserted_at', true)
+    if (setState) setState(body)
+    return body
+  } catch (error) {
+    console.log('error', error)
+  }
+}
+
+export const fetchProofs = async(channelId, setState) => {
+  try {
+    let { body } = await supabase
+      .from('proofs')
+      .select(`*`)
+      .eq('channel_id', channelId)
+      .order('created_at', true)
     if (setState) setState(body)
     return body
   } catch (error) {
