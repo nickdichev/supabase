@@ -29,6 +29,7 @@ const Proof = ({ proof }) => {
   async function approveProof() {
     editProof(proof, {status: 'approved'})
   }
+
   async function denyProof() {
     editProof(proof, {status: 'denied'})
   }

@@ -20,7 +20,7 @@ export const useStore = (props) => {
   const [newOrUpdatedUser, handleNewOrUpdatedUser] = useState(null)
   const [deletedChannel, handleDeletedChannel] = useState(null)
   const [deletedMessage, handleDeletedMessage] = useState(null)
-  const [updatedProof, handleUpdateProof] = useState(null)
+  const [updatedProof, handleUpdatedProof] = useState(null)
 
   // Load initial data and set up listeners
   useEffect(() => {
@@ -102,6 +102,10 @@ export const useStore = (props) => {
     if (deletedMessage) setMessages(messages.filter((message) => message.id !== deletedMessage.id))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deletedMessage])
+
+  useEffect(() => {
+    if (updatedProof) setProofs(proofs.map(p => p.id !== updatedProof.new.id ? p : updatedProof.new))
+  }, [updatedProof])
 
   // New channel received from Postgres
   useEffect(() => {
@@ -275,7 +279,6 @@ export const deleteMessage = async (message_id) => {
 }
 
 export const editProof = async (proof, changes) => {
-  console.log(proof)
   let {id: proof_id} = proof
 
   try {
