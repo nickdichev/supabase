@@ -17,6 +17,23 @@ const ChannelsPage = (props) => {
   const { id: channelId } = router.query
   const { messages, channels, proofs } = useStore({ channelId })
 
+  // messages and proofs are concatenated (List.concatenate?)
+  // let messages_and_proofs = messages.concatenate(proofs) ??
+
+  // order messages_and_proofs by inserted_at (List.order_by?)
+
+  //{messages_and_proofs.map((x) => (
+  // need to either render a <Message> or <Proof> component depending on what x is
+  // x is either a proof or a message since we concatenated the lists
+  // how to determine? idk
+  // if (x.proof_url} {
+  //  // you know x is a proof since message doesn't have proof_url
+  //  // <Proof>
+  // } else {
+  //    <Message>
+  // }
+  //))}
+
   useEffect(() => {
     messagesEndRef.current.scrollIntoView({
       block: 'start',
