@@ -7,7 +7,7 @@ import { supabase } from '~/lib/Store'
 const Proof = ({ proof }) => {
   const { user, userRoles } = useContext(UserContext)
   const [ proofUrl, setProofUrl] = useState(null)
-  const {proof_url: url} = proof
+  const { proof_url: url, status: proof_status } = proof
 
   useEffect(() => {
     if (url) downloadImage(url)
@@ -41,6 +41,7 @@ const Proof = ({ proof }) => {
           <div />
         )}
       </div>
+    <p>Status: {proof.status}</p>
     </div>
   )
 }
