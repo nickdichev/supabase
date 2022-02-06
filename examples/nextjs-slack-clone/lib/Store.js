@@ -203,7 +203,7 @@ export const fetchProofs = async(channelId, setState) => {
       .from('proofs')
       .select(`*`)
       .eq('channel_id', channelId)
-      .order('created_at', true)
+      .order('inserted_at', true)
     if (setState) setState(body)
     return body
   } catch (error) {
