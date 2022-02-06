@@ -273,3 +273,15 @@ export const deleteMessage = async (message_id) => {
     console.log('error', error)
   }
 }
+
+export const editProof = async (proof, changes) => {
+  console.log(proof)
+  let {id: proof_id} = proof
+
+  try {
+    let { body } = await supabase.from('proofs').update(changes).match({ id: proof_id })
+    return body
+  } catch (error) {
+    console.log('error', error)
+  }
+}

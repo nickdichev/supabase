@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import UserContext from '~/lib/UserContext'
-import { deleteMessage } from '~/lib/Store'
+import { deleteMessage, editProof } from '~/lib/Store'
 import TrashIcon from '~/components/TrashIcon'
 import { supabase } from '~/lib/Store'
 
@@ -26,6 +26,13 @@ const Proof = ({ proof }) => {
     }
   }
 
+  async function approveProof() {
+    editProof(proof, {status: 'approved'})
+  }
+  async function denyProof() {
+    editProof(proof, {status: 'denied'})
+  }
+
   return (
     <div className="py-1 flex items-center space-x-2">
       <div>
@@ -41,7 +48,15 @@ const Proof = ({ proof }) => {
           <div />
         )}
       </div>
+    <div>
     <p>Status: {proof.status}</p>
+    <button
+      className="bg-green-900 hover:bg-green-800 text-white py-2 px-4 my-1 rounded w-full transition duration-150"
+    onClick={() => approveProof()}>Approve</button>
+    <button 
+      className="bg-red-900 hover:bg-red-800 text-white py-2 px-4 my-1 rounded w-full transition duration-150"
+    onClick={() => denyProof()}>Deny</button>
+    </div>
     </div>
   )
 }
